@@ -57,11 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2>Acesse sua conta</h2>
                 <p>Consulte suas faturas de forma rápida e segura.</p>
 
-                <?php if (!empty($error_message)): ?>
-                    <div class="error-banner"><?php echo htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
+                <div id="error-container"></div>
 
-                <form action="index.php" method="post" novalidate>
+                <form id="login-form" action="../api/api_login.php" method="post" novalidate>
                     <div class="input-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
@@ -81,5 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              <h2>Seu controle financeiro na palma da mão.</h2>
         </section>
     </main>
+
+    <?php require_once '../includes/footer.php'; ?>    
+
 </body>
 </html>
