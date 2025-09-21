@@ -2,7 +2,6 @@
 session_start();
 require_once '../config/database.php';
 
-// Se o usuário já estiver logado, redireciona para o dashboard
 if (isset($_SESSION['user_id'])) {
     header("Location: dashboard.php");
     exit();
@@ -26,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->rowCount() == 1) {
                 $user = $stmt->fetch();
                 if (password_verify($password, $user['password_hash'])) {
-                    // Senha correta, inicia a sessão
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['name'];
                     header("Location: dashboard.php");
@@ -48,35 +46,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Invoices</title>
+    <title>Acesse sua conta - Invoices</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <h1>Invoices</h1>
-            <p>Acesse suas faturas de forma simples e transparente.</p>
-            
-            <?php if (!empty($error_message)): ?>
-                <div class="error-banner"><?php echo htmlspecialchars($error_message); ?></div>
-            <?php endif; ?>
+    <main class="main-content-login">
+        <section class="form-section">
+            <div class="form-card">
+                <a href="index.php"><h1 class="logo-form">Invoices</h1></a>
+                <h2>Acesse sua conta</h2>
+                <p>Consulte suas faturas de forma rápida e segura.</p>
 
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" novalidate>
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                <?php if (!empty($error_message)): ?>
+                    <div class="error-banner"><?php echo htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+
+                <form action="index.php" method="post" novalidate>
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+                 <div class="form-footer">
+                    <p>Não tem uma conta? <a href="register.php">Cadastre-se</a></p>
                 </div>
-                <div class="input-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn">Entrar</button>
-            </form>
-            <div class="login-footer">
-                <p>Usuário de teste: <strong>joao.silva@example.com</strong></p>
-                <p>Senha: <strong>senha123</strong></p>
             </div>
-        </div>
-    </div>
+        </section>
+        <section class="promo-section">
+             <h2>Seu controle financeiro na palma da mão.</h2>
+        </section>
+    </main>
 </body>
 </html>

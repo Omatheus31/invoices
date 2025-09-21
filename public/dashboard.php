@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../config/database.php';
 require_once '../includes/header.php';
 
+function getStatusClass($status) {
+    switch ($status) {
+        case 'Paga': return 'status-paid';
+        case 'Vencida': return 'status-overdue';
+        case 'Pendente': return 'status-pending';
+        default: return '';
+    }
+}
+
 try {
     $sql = "SELECT id, description, amount, due_date, status FROM invoices WHERE user_id = :user_id ORDER BY due_date DESC";
     $stmt = $pdo->prepare($sql);
@@ -20,14 +29,6 @@ try {
     die("Não foi possível buscar as faturas.");
 }
 
-function getStatusClass($status) {
-    switch ($status) {
-        case 'Paga': return 'status-paid';
-        case 'Vencida': return 'status-overdue';
-        case 'Pendente': return 'status-pending';
-        default: return '';
-    }
-}
 ?>
 
 <main class="container">
@@ -43,7 +44,7 @@ function getStatusClass($status) {
             </div>
         <?php else: ?>
             <?php foreach ($invoices as $invoice): ?>
-                <div class="card invoice-card" data-invoice-id="<?php echo $invoice['id']; ?>">
+                <a href="invoice_details.php?id=<?php echo $invoice['id']; ?>" class="invoice-link">
                     <div class="invoice-summary">
                         <div class="invoice-description">
                             <h3><?php echo htmlspecialchars($invoice['description']); ?></h3>
@@ -56,7 +57,7 @@ function getStatusClass($status) {
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
