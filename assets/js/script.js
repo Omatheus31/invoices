@@ -60,4 +60,54 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    const registerForm = document.getElementById('register-form');
+
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (event) => {
+            // 1. Prevenir o envio padrão (igual ao do login)
+            event.preventDefault();
+
+            // 2. Pegar o container de mensagens e o botão (igual ao do login)
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = registerForm.querySelector('button[type="submit"]');
+
+            // 3. Criar o FormData (igual ao do login)
+            const formData = new FormData(registerForm);
+
+            // 4. Lógica de desabilitar botão e limpar mensagens (igual ao do login)
+            submitButton.disabled = true;
+            submitButton.textContent = 'Cadastrando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                // 5. Fazer o fetch para o registerForm.action (igual ao do login)
+                const response = await fetch(registerForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                // 6. AQUI ESTÁ A ÚNICA DIFERENÇA REAL
+                if (data.success) {
+                    // Se o cadastro deu certo, mostre uma mensagem de sucesso
+                    // e limpe o formulário.
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+                    registerForm.reset(); // Limpa os campos do formulário
+                } else {
+                    // Se deu erro, mostre a mensagem de erro
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+
+            } catch (error) {
+                // Tratamento de erro (igual ao do login)
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro. Tente novamente.</div>`;
+            } finally {
+                // Reabilitar o botão (igual ao do login)
+                submitButton.disabled = false;
+                submitButton.textContent = 'Cadastrar';
+            }
+        });
+    }
 });

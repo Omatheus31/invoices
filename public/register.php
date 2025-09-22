@@ -1,59 +1,3 @@
-<?php
-session_start();
-require_once '../config/database.php';
-
-$error_message = '';
-$success_message = '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Coleta e sanitização básica dos dados
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $cpf = trim($_POST['cpf']); // Adicionar máscara se desejar no frontend
-    $birth_date = trim($_POST['birth_date']);
-    $password = trim($_POST['password']);
-
-    // 2. Validação dos campos
-    if (empty($name) || empty($email) || empty($cpf) || empty($birth_date) || empty($password)) {
-        $error_message = "Todos os campos são obrigatórios.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Formato de email inválido.";
-    } else {
-        try {
-            // 3. Verifica se o email ou CPF já existem
-            $sql = "SELECT id FROM users WHERE email = :email OR cpf = :cpf";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['email' => $email, 'cpf' => $cpf]);
-            if ($stmt->rowCount() > 0) {
-                $error_message = "Email ou CPF já cadastrado.";
-            } else {
-                // 4. Hash da senha (segurança)
-                $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-                // 5. Inserção no banco de dados com Prepared Statements
-                $sql = "INSERT INTO users (name, email, cpf, birth_date, password_hash) VALUES (:name, :email, :cpf, :birth_date, :password_hash)";
-                $stmt = $pdo->prepare($sql);
-
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':cpf', $cpf);
-                $stmt->bindParam(':birth_date', $birth_date);
-                $stmt->bindParam(':password_hash', $password_hash);
-                
-                if ($stmt->execute()) {
-                    $success_message = "Cadastro realizado com sucesso! Você já pode fazer o login.";
-                    // Limpa os campos do post para não repopular o formulário
-                    $_POST = array();
-                } else {
-                    $error_message = "Ocorreu um erro ao realizar o cadastro. Tente novamente.";
-                }
-            }
-        } catch (PDOException $e) {
-            $error_message = "Erro no banco de dados: " . $e->getMessage();
-        }
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -70,14 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2>Crie sua conta</h2>
                 <p>É rápido, fácil e seguro.</p>
 
-                <?php if (!empty($error_message)): ?>
-                    <div class="error-banner"><?php echo htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
-                 <?php if (!empty($success_message)): ?>
-                    <div class="success-banner"><?php echo htmlspecialchars($success_message); ?></div>
-                <?php endif; ?>
+                <div id="message-container"></div>
 
-                <form action="register.php" method="post" novalidate>
+                <form id="register-form" action="../api/api_register.php" method="post" novalidate>
                     <div class="input-group">
                         <label for="name">Nome Completo</label>
                         <input type="text" id="name" name="name" required value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
@@ -108,5 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <section class="promo-section">
             </section>
     </main>
+    <?php require_once '../includes/footer.php'; ?>
 </body>
 </html>
