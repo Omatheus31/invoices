@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+/* ==========================================================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GLOBAIS
+   ========================================================================== */
 :root {
     --primary-blue: #007BFF;
-    --dark-blue: #0056b3;
     --black: #1a1a1a;
     --dark-gray: #333;
-    --medium-gray: #ccc;
-    --light-gray: #f4f4f4;
+    --medium-gray: #a0a0a0;
+    --light-gray: #f8f9fa;
     --white: #FFFFFF;
-    --gradient-start: #a1ffce;
-    --gradient-end: #faffd1;
+    --border-color: #dee2e6;
     --gradient-midway-start: #1ddde8;
     --gradient-midway-end: #22f193;
 
@@ -18,205 +19,245 @@
     --status-overdue: #dc3545;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ==========================================================================
+   2. ESTILOS BASE E RESET (MOBILE-FIRST)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--light-gray);
-    color: #333;
+    color: var(--dark-gray);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-
-/* --- HEADER V2 --- */
-.main-header-v2 {
-    background-color: var(--black);
-    color: var(--white);
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--dark-gray);
+main {
+    flex-grow: 1; /* Faz o conteúdo principal crescer e empurrar o rodapé para baixo */
 }
-.header-container { display: flex; justify-content: space-between; align-items: center; }
-.header-logos { display: flex; align-items: center; gap: 1.5rem; }
-.header-logos a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; }
-.header-logos a:hover { color: var(--medium-gray); }
-.logo-main { font-weight: 700; font-size: 1.5rem; }
-.header-actions { display: flex; align-items: center; gap: 1rem; }
-.welcome-message { font-size: 0.9rem; }
 
-/* --- BOTÕES --- */
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   3. COMPONENTES REUTILIZÁVEIS
+   ========================================================================== */
 .btn {
-    padding: 0.6rem 1.5rem;
-    border: none;
-    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 6px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
     text-align: center;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
-.btn-primary { background-color: var(--black); color: var(--white); border: 2px solid var(--black); }
-.btn-primary:hover { background-color: var(--dark-gray); border-color: var(--dark-gray); }
-.btn-secondary { background-color: transparent; color: var(--white); border: 2px solid var(--white); }
-.btn-secondary:hover { background-color: var(--white); color: var(--black); }
+.btn-primary { background-color: var(--black); color: var(--white); border-color: var(--black); }
+.btn-primary:hover { background-color: #444; border-color: #444; }
+
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   4. LAYOUT DOS MÓDULOS (ESTILO BASE - MOBILE)
+   ========================================================================== */
+
+/* --- HEADER --- */
+.main-header-v2 { background-color: var(--black); color: var(--white); padding: 1rem 0; }
+.header-container { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.header-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; }
+.header-logos a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+.header-logos a:hover { color: var(--medium-gray); }
+.logo-main { font-weight: 700; font-size: 1.5rem; }
+.header-actions { display: flex; align-items: center; gap: 1rem; width: 100%; }
+.header-actions .btn { width: auto; flex-grow: 1; padding: 0.6rem 1rem; font-size: 0.9rem; }
+.welcome-message { display: none; } /* Escondido no mobile */
 
 /* --- LOGIN & REGISTER PAGE --- */
-.main-content-login {
-    display: flex;
-    min-height: 100vh;
-}
-.form-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    background-color: var(--white);
-}
-.form-card { width: 100%; max-width: 420px; }
-.logo-form { color: var(--black); text-decoration: none; margin-bottom: 1rem; text-align: center; }
-.form-card h2 { font-size: 2rem; margin-bottom: 0.5rem; color: #333; }
+.main-content-login { display: flex; flex-direction: column; }
+.form-section { padding: 2rem 1rem; background-color: var(--white); }
+.promo-section { display: flex; justify-content: center; align-items: center; text-align: cenPter; color: var(--white); background: linear-gradient(135deg, var(--gradient-midway-start), var(--gradient-midway-end)); padding: 4rem 1rem; }
+.form-card h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
 .form-card p { margin-bottom: 2rem; color: #666; }
 .input-group { margin-bottom: 1.5rem; }
 .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-.input-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-.input-group input:focus { outline: 2px solid var(--primary-blue); }
-.form-footer { margin-top: 1.5rem; text-align: center; font-size: 0.9rem; }
-.form-footer a { color: var(--primary-blue); text-decoration: none; font-weight: 500; }
-.promo-section {
-    flex: 1;
-    background: linear-gradient(135deg, var(--gradient-midway-start), var(--gradient-midway-end));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--white);
-    text-align: center;
-}
-.promo-section h2 { font-size: 2.5rem; padding: 2rem; max-width: 400px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
-
-/* --- BANNERS DE ALERTA --- */
-.error-banner, .success-banner {
-    padding: 0.75rem;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-}
-.error-banner { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-.success-banner { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+.input-group input { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; }
+.form-footer a { color: var(--primary-blue); font-weight: 500; text-decoration: none; }
 
 /* --- DASHBOARD --- */
 .dashboard-header { padding: 2rem 0; }
-.card { background: var(--white); border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); padding: 1.5rem; margin-bottom: 1rem; }
-.invoice-card { transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-.invoice-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-.invoice-summary { display: flex; justify-content: space-between; align-items: center; }
-.invoice-description h3 { font-size: 1.2rem; }
-.invoice-amount { font-size: 1.5rem; font-weight: 700; color: var(--primary-blue); }
-.invoice-status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: var(--white); }
+.invoice-link { text-decoration: none; color: inherit; display: block; }
+.invoice-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.invoice-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+.invoice-summary { display: flex; flex-direction: column; gap: 0.5rem; }
+.invoice-details { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 1rem; }
+.invoice-description h3 { font-size: 1.1rem; }
+.invoice-description p { font-size: 0.9rem; color: #666; margin-top: 4px; }
+.invoice-amount { font-size: 1.3rem; font-weight: 700; color: var(--primary-blue); }
+.invoice-status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; color: var(--white); }
 .status-paid { background-color: var(--status-paid); }
-.status-pending { background-color: var(--status-pending); color: var(--black); }
+.status-pending { background-color: var(--status-pending); color: var(--dark-gray); }
 .status-overdue { background-color: var(--status-overdue); }
 
-/* --- FOOTER V2 --- */
-.main-footer-v2 { background-color: var(--black); color: var(--white); padding: 3rem 0 1rem 0; }
-.footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
-.footer-column { flex: 1; min-width: 200px; }
-.footer-column h4 { margin-bottom: 1rem; color: var(--white); }
-.footer-column ul { list-style: none; }
-.footer-column ul li { margin-bottom: 0.5rem; }
-.footer-column a, .social-links a, .app-stores span { color: var(--medium-gray); text-decoration: none; transition: color 0.3s; }
-.footer-column a:hover, .social-links a:hover { color: var(--white); }
-.social-links, .app-stores { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
-.footer-bottom { text-align: center; border-top: 1px solid var(--dark-gray); padding-top: 1rem; font-size: 0.9rem; color: var(--medium-gray); }
+/* --- INVOICE DETAILS PAGE --- */
+.page-header { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; margin: 2rem 0; }
+.details-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+.btn-back { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-blue); font-weight: 500; padding: 8px 16px; border-radius: 8px; transition: background-color 0.2s ease; }
+.btn-back:hover { background-color: #eef5ff; }
 
-/* --- RESPONSIVIDADE --- */
-@media (max-width: 992px) {
-    .promo-section { display: none; }
-    .header-logos { flex-wrap: wrap; justify-content: center; }
-}
-@media (max-width: 768px) {
-    .header-container { flex-direction: column; gap: 1rem; }
-    .invoice-summary { flex-direction: column; align-items: flex-start; gap: 1rem; }
-    .invoice-details { text-align: left; }
+/* --- FOOTER --- */
+.main-footer-v2 { background-color: var(--black); color: var(--white); padding: 3rem 0 1rem 0; margin-top: auto; }
+.footer-content { display: flex; flex-direction: column; gap: 2.5rem; margin-bottom: 2rem; }
+.footer-column { text-align: center; }
+.footer-column h4 { margin-bottom: 1rem; }
+.footer-column ul { list-style: none; padding: 0; }
+.footer-column ul li { margin-bottom: 0.7rem; }
+.footer-column a { color: var(--medium-gray); text-decoration: none; transition: color 0.2s; }
+.footer-column a:hover { color: var(--white); }
+.footer-bottom { text-align: center; border-top: 1px solid var(--dark-gray); padding-top: 1.5rem; font-size: 0.9rem; color: var(--medium-gray); }
+
+/* --- BANNERS --- */
+.error-banner, .success-banner { padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid transparent; }
+.error-banner { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.success-banner { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+
+/* ==========================================================================
+   5. MEDIA QUERIES PARA TELAS MAIORES (TABLET E DESKTOP)
+   ========================================================================== */
+
+/* --- TABLETS E TELAS INTERMEDIÁRIAS --- */
+@media (min-width: 768px) {
+    .container { width: 85%; max-width: 1200px; }
+
+    .header-container { flex-direction: row; }
+    .header-actions { width: auto; }
+    .welcome-message { display: inline-block; font-size: 0.9rem; }
+
+    .main-content-login { flex-direction: row; }
+    .form-section { flex: 1; display: flex; justify-content: center; align-items: center; }
+    .promo-section { flex: 1; min-height: 100vh; }
+    .promo-section h2 { font-size: 2.5rem; }
+
+    .invoice-summary { flex-direction: row; align-items: center; }
+    .invoice-details { width: auto; margin-top: 0; }
+
+    .page-header { flex-direction: row; align-items: center; }
+    .details-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .footer-content { flex-direction: row; gap: 2rem; }
+    .footer-column { text-align: left; flex: 1; min-width: 180px; }
 }
 
-.invoice-link {
-    text-decoration: none;
-    color: inherit;
+/* --- DESKTOPS MAIORES --- */
+@media (min-width: 1024px) {
+    .form-section { flex-basis: 500px; flex-grow: 0; flex-shrink: 0; }
 }
 
-/* --- Invoice Details Page --- */
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-.btn-back {
-    text-decoration: none;
-    color: var(--primary-blue);
-    font-weight: 500;
-}
-.invoice-details-card { padding: 2rem; }
-.invoice-details-card h3 { margin-bottom: 1rem; }
-.details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-}
-.details-grid div { font-size: 1.1rem; }
-.details-grid strong {
-    display: block;
-    color: #666;
+/* ==========================================================================
+   6. SESSÃO DE POLIMENTO FINAL (AJUSTES FINOS DE UI/UX)
+   ========================================================================== */
+
+/* --- AJUSTE 1: Header - Botão "Sair" --- */
+/* Transforma o link "Sair" em um botão elegante de verdade */
+.header-actions a.btn {
+    background-color: transparent;
+    color: var(--white);
+    border: 2px solid var(--medium-gray);
+    padding: 0.5rem 1.2rem;
     font-size: 0.9rem;
-    margin-bottom: 0.25rem;
+    border-radius: 50px; /* Bordas arredondadas */
+    flex-grow: 0; /* Impede que ele estique */
 }
-.invoice-amount-details {
+
+.header-actions a.btn:hover {
+    background-color: var(--white);
+    color: var(--black);
+    border-color: var(--white);
+}
+
+/* --- AJUSTE 2: Dashboard - Cards de Fatura "Perfeitamente Perfeitos" --- */
+/* Adiciona mais destaque e estrutura aos cards */
+.invoice-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border-color); /* Borda sutil para definir o card */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* Sombra ainda mais sutil */
+}
+
+/* Melhora o alinhamento do valor e status */
+.invoice-details {
+    text-align: right; /* Garante alinhamento à direita */
+}
+
+.invoice-amount {
+    display: block; /* Coloca o valor em sua própria linha */
+    margin-bottom: 0.35rem; /* Espaço abaixo do valor */
+    font-size: 1.6rem; /* Deixa o valor mais proeminente */
+}
+
+/* --- AJUSTE 3: Login/Cadastro - O "TCHAN" --- */
+/* Traz mais elegância e organização para os formulários */
+.form-card .logo-form {
+    color: var(--primary-blue);
     font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--primary-blue);
-}
-.barcode-section {
-    margin-top: 2rem;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-    border: 1px solid #eee;
-}
-.barcode-text {
-    font-family: 'Courier New', Courier, monospace;
-    word-break: break-all;
-    font-size: 1.1rem;
-}
-
-/* Melhora a hierarquia visual no card da fatura no dashboard */
-.invoice-description p {
-    font-size: 0.9rem; /* Diminui um pouco o tamanho da fonte */
-    color: #666;      /* Deixa o texto com um tom de cinza mais suave */
-    margin-top: 4px;   /* Garante um pequeno espaço acima da data */
-}
-
-/* Estiliza o botão/link de "Voltar" na página de detalhes */
-.btn-back {
-    display: inline-flex; /* Usa flex para alinhar o ícone e o texto */
-    align-items: center;
-    gap: 8px; /* Espaço entre a seta e o texto */
+    font-size: 2.5rem;
     text-decoration: none;
-    color: var(--primary-blue);
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
+    margin-bottom: 1rem;
+    display: inline-block;
 }
 
-.btn-back:hover {
-    background-color: #eef5ff; /* Um azul bem claro para o efeito hover */
+.form-card h2 {
+    color: var(--dark-gray);
+    font-weight: 600;
+    font-size: 1.9rem;
+    margin-bottom: 0.5rem;
 }
+
+.form-card p {
+    color: #777;
+    margin-bottom: 3rem; /* Aumenta o respiro antes dos campos */
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.input-group input {
+    border-radius: 8px; /* Bordas um pouco mais arredondadas */
+    padding: 0.9rem;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+}
+
+.input-group input:focus {
+    background-color: var(--white);
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.form-card .btn-primary {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+}
+
+css
+.card-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.card-header .btn { width: auto; }

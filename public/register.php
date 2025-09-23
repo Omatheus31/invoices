@@ -37,6 +37,10 @@
                         <label for="password">Senha</label>
                         <input type="password" id="password" name="password" required>
                     </div>
+                    <div class="input-group">
+                        <label for="confirm_password">Confirmar Senha</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </form>
                 <div class="form-footer">

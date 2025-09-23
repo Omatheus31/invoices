@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- MÓDULO 1: Interatividade dos cards de fatura ---
+    // MÓDULO 1: Interatividade dos cards de fatura
     const invoiceCards = document.querySelectorAll('.invoice-card');
     invoiceCards.forEach(card => {
         // Não precisamos mais do efeito de clique, pois o card inteiro é um link.
         // Podemos deixar essa parte vazia ou remover se quiser.
     });
 
-    // --- MÓDULO 2: Lógica de Login com AJAX ---
+    // Lógica de Login com AJAX
     const loginForm = document.getElementById('login-form');
 
     if (loginForm) {
@@ -81,6 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
             messageContainer.innerHTML = '';
 
             try {
+
+                const password = registerForm.querySelector('#password').value;
+                const confirmPassword = registerForm.querySelector('#confirm_password').value;
+
+                // ADICIONA A VALIDAÇÃO
+                if (password !== confirmPassword) {
+                    messageContainer.innerHTML = `<div class="error-banner">As senhas não coincidem.</div>`;
+                    // Para a execução aqui, reabilitando o botão
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Cadastrar';
+                    return; // Sai da função
+                }
                 // 5. Fazer o fetch para o registerForm.action (igual ao do login)
                 const response = await fetch(registerForm.action, {
                     method: 'POST',
@@ -107,6 +119,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Reabilitar o botão (igual ao do login)
                 submitButton.disabled = false;
                 submitButton.textContent = 'Cadastrar';
+            }
+        });
+    }
+
+    // Máscaras e Validação Frontend
+    const cpfInput = document.getElementById('cpf');
+    const birthDateInput = document.getElementById('birth_date');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto após o terceiro dígito
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto após o sexto dígito
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos dois últimos dígitos
+            e.target.value = value.slice(0, 14); // Limita o tamanho
+        });
+    }
+
+    if (birthDateInput) {
+        // Altera o tipo do input de 'date' para 'text' para permitir a máscara
+        birthDateInput.type = 'text';
+        birthDateInput.placeholder = 'dd/mm/aaaa';
+
+        birthDateInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '$1/$2');
+            value = value.replace(/(\d{2})(\d)/, '$1/$2');
+            e.target.value = value.slice(0, 10);
+        });
+    }
+
+    // Lógica de Pagamento de Fatura com AJAX
+    const payButton = document.getElementById('pay-invoice-btn');
+
+    if (payButton) {
+        payButton.addEventListener('click', async () => {
+            const invoiceId = payButton.dataset.invoiceId;
+            
+            if (!confirm('Deseja realmente marcar esta fatura como paga?')) {
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('invoice_id', invoiceId);
+
+                const response = await fetch('../api/api_update_status.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+
+                if (data.success) {
+                    // Atualiza a UI sem recarregar a página!
+                    const statusElement = document.querySelector('.invoice-status');
+                    statusElement.textContent = 'Paga';
+                    statusElement.className = 'invoice-status status-paid';
+                    payButton.style.display = 'none'; // Esconde o botão
+                    alert(data.message); // Exibe um alerta de sucesso
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            } catch (error) {
+                alert('Ocorreu um erro de comunicação com o servidor.');
             }
         });
     }

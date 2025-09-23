@@ -58,7 +58,15 @@ if ($invoice_id > 0) {
         <div class="error-banner"><?php echo htmlspecialchars($error); ?></div>
     <?php elseif (isset($invoice)): ?>
         <div class="card invoice-details-card">
-            <h3><?php echo htmlspecialchars($invoice['description']); ?></h3>
+            <div class="card-header">
+                <h3><?php echo htmlspecialchars($invoice['description']); ?></h3>
+                
+                <?php if ($invoice['status'] === 'Pendente' || $invoice['status'] === 'Vencida'): ?>
+                    <button id="pay-invoice-btn" class="btn btn-primary" data-invoice-id="<?php echo $invoice['id']; ?>">
+                        Pagar Fatura
+                    </button>
+                <?php endif; ?>
+            </div>
             <hr>
             <div class="details-grid">
                 <div>
