@@ -27,3 +27,15 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `invoices`
   ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+
+-- =================================================================
+-- SCRIPT PARA INSERIR FATURAS DE EXEMPLO PARA UM NOVO USUÁRIO
+-- =================================================================
+--
+-- INSTRUÇÕES:
+-- 1. Encontre o ID do usuário que você acabou de cadastrar na tabela `users`.
+-- 2. Substitua TODAS as 4 ocorrências de 'SEU_NOVO_ID_DE_USUARIO_AQUI' pelo seu ID.
+-- 3. Execute este script na aba SQL do phpMyAdmin.
+--
+

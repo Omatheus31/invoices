@@ -91,13 +91,36 @@ Você precisará de um ambiente de servidor local com Apache, MySQL e PHP. As op
     [**http://localhost/invoices/**](http://localhost/invoices/)
     *(Graças ao redirecionamento, você não precisa mais digitar `/public`)*
 
-### **🧪 Primeiro Uso: Cadastre-se e Crie sua Fatura**
+---
 
-O sistema começará com um banco de dados limpo. Siga os passos abaixo para testar todas as funcionalidades:
+### 🧪 Primeiro Uso e Teste das Funcionalidades
 
-1.  **Crie sua Conta:** Na tela inicial, clique em "Cadastre-se" e crie um novo usuário.
-2.  **Faça o Login:** Após o cadastro, faça o login com as credenciais que você acabou de criar.
-3.  **Crie uma Fatura (Opcional):** Para ver o dashboard em ação, você pode adicionar uma fatura de teste manualmente no `phpMyAdmin` na tabela `invoices`, associando-a ao `id` do seu novo usuário.
+O sistema começará com um banco de dados limpo. Siga os passos abaixo para testar todas as funcionalidades.
+
+**1. Crie sua Conta:**
+Na tela inicial (`http://localhost/invoices/`), clique em "Cadastre-se" e crie um novo usuário.
+
+**2. Faça o Login:**
+Após o cadastro, faça o login com as credenciais que você acabou de criar. Você será direcionado para um Dashboard vazio.
+
+**3. Adicionando Faturas de Exemplo (Opcional, mas Recomendado):**
+Para ver o dashboard e as funcionalidades em ação, você pode popular sua conta com faturas de exemplo de forma rápida.
+
+* **a) Encontre seu ID de Usuário:**
+    * Vá para o `phpMyAdmin` e abra a tabela `users`.
+    * Localize o usuário que você acabou de criar e anote o número na coluna `id`.
+
+* **b) Prepare o Script SQL:**
+    * No código do projeto, abra o arquivo `sample_invoices.sql`.
+    * Você **precisa substituir** todas as 4 ocorrências de `SEU_NOVO_ID_DE_USUARIO_AQUI` pelo número do `id` que você encontrou no passo anterior.
+
+* **c) Execute o Script:**
+    * Volte para o `phpMyAdmin`, clique no banco `invoices_db` e vá para a aba **"SQL"**.
+    * Copie o conteúdo **modificado** do `sample_invoices.sql` e cole na caixa de texto.
+    * Clique em **"Executar" (Go)**.
+
+* **d) Veja a Mágica Acontecer:**
+    * Volte para a aba do projeto no navegador e **atualize a página do Dashboard**. As 4 faturas de exemplo agora estarão listadas, prontas para você interagir (ver detalhes, marcar como paga, etc.).
 
 ---
 
