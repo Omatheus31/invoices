@@ -36,6 +36,7 @@
                     <div class="input-group">
                         <label for="password">Senha</label>
                         <input type="password" id="password" name="password" required>
+                        <div id="password-strength-feedback"></div>
                     </div>
                     <div class="input-group">
                         <label for="confirm_password">Confirmar Senha</label>

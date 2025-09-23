@@ -187,4 +187,55 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Validação de Senha Forte
+    const passwordInput = document.getElementById('password');
+    const strengthFeedback = document.getElementById('password-strength-feedback');
+    const registerButton = document.querySelector('#register-form button[type="submit"]');
+
+    if (passwordInput && strengthFeedback && registerButton) {
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            let strength = 0;
+            let feedbackText = '';
+            let feedbackColor = '';
+
+            if (password.length >= 8) strength++; // Critério 1: Tamanho
+            if (password.match(/[a-z]/)) strength++;    // Critério 2: Letra minúscula
+            if (password.match(/[A-Z]/)) strength++;    // Critério 3: Letra maiúscula
+            if (password.match(/[0-9]/)) strength++;    // Critério 4: Número
+            if (password.match(/[^a-zA-Z0-9]/)) strength++; // Critério 5: Símbolo
+
+            switch (strength) {
+                case 0:
+                case 1:
+                case 2:
+                    feedbackText = 'Senha Fraca';
+                    feedbackColor = '#dc3545'; // Vermelho
+                    break;
+                case 3:
+                case 4:
+                    feedbackText = 'Senha Média';
+                    feedbackColor = '#ffc107'; // Laranja
+                    break;
+                case 5:
+                    feedbackText = 'Senha Forte';
+                    feedbackColor = '#28a745'; // Verde
+                    break;
+            }
+
+            if (password.length === 0) {
+                strengthFeedback.innerHTML = '';
+            } else {
+                strengthFeedback.innerHTML = `<span style="color: ${feedbackColor}; font-size: 0.85rem; font-weight: 500;">${feedbackText}</span>`;
+            }
+            
+            // Impede o envio se a senha for muito fraca
+            if (strength < 3) {
+                registerButton.disabled = true;
+            } else {
+                registerButton.disabled = false;
+            }
+        });
+    }
 });

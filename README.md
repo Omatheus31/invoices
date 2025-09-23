@@ -63,13 +63,13 @@ Você precisará de um ambiente de servidor local com Apache, MySQL e PHP. As op
 ### **Instruções de Instalação (Passo a Passo)**
 
 1.  **Clone o Repositório**
-    Abra seu terminal (Prompt de Comando, PowerShell, ou Terminal do Mac), navegue até o diretório onde deseja salvar o projeto e clone o repositório:
+    Abra seu terminal, navegue até o diretório onde deseja salvar o projeto e clone o repositório:
     ```bash
     git clone [https://github.com/Omatheus31/invoices.git](https://github.com/Omatheus31/invoices.git)
     ```
 
 2.  **Mova a Pasta do Projeto**
-    Mova a pasta `invoices` que você acabou de clonar para o diretório raiz do seu servidor web. Este diretório é chamado `htdocs` tanto no XAMPP quanto no MAMP.
+    Mova a pasta `invoices` para o diretório raiz do seu servidor web (`htdocs`).
     * **Localização no XAMPP (Windows):** `C:/xampp/htdocs/`
     * **Localização no MAMP (macOS):** `/Applications/MAMP/htdocs/`
 
@@ -78,28 +78,45 @@ Você precisará de um ambiente de servidor local com Apache, MySQL e PHP. As op
 
 4.  **Crie o Banco de Dados**
     * Abra seu navegador e acesse o phpMyAdmin: `http://localhost/phpmyadmin`.
-    * Clique em **"Novo"** (ou "New") na barra lateral para criar um banco de dados.
-    * No campo "Nome do banco de dados", digite `invoices_db` e clique em **"Criar"** (ou "Create").
+    * Crie um novo banco de dados com o nome `invoices_db`.
 
 5.  **Execute o Script SQL de Instalação**
-    * Com o banco `invoices_db` selecionado, clique na aba **"SQL"** no topo da página.
-    * No seu computador, abra o arquivo `database_setup.sql` que está na raiz do projeto `invoices/`.
-    * Copie **todo o conteúdo** do arquivo.
-    * Cole o conteúdo na caixa de texto da aba SQL no phpMyAdmin e clique em **"Executar"** (ou "Go").
-    * Este script criará e configurará todas as tabelas e dados de exemplo necessários.
+    * Com o banco `invoices_db` selecionado, clique na aba **"SQL"**.
+    * Abra o arquivo `database_setup.sql` que está na raiz do projeto.
+    * Copie todo o conteúdo e cole na caixa de texto do phpMyAdmin. Clique em **"Executar"** (ou "Go").
+    * Este script criará as tabelas `users` e `invoices`, prontas para uso.
 
 6.  **Acesse a Aplicação**
-    Pronto! A instalação está completa. Abra uma nova aba no seu navegador e acesse:
-    [**http://localhost/invoices/public/**](http://localhost/invoices/public/)
+    Pronto! Abra uma nova aba no seu navegador e acesse:
+    [**http://localhost/invoices/**](http://localhost/invoices/)
+    *(Graças ao redirecionamento, você não precisa mais digitar `/public`)*
 
-    Você será direcionado para a tela de login.
+### **🧪 Primeiro Uso: Cadastre-se e Crie sua Fatura**
 
-### **🧪 Credenciais para Teste**
+O sistema começará com um banco de dados limpo. Siga os passos abaixo para testar todas as funcionalidades:
 
-Para testar o sistema imediatamente, use o usuário de exemplo que o script SQL criou:
+1.  **Crie sua Conta:** Na tela inicial, clique em "Cadastre-se" e crie um novo usuário.
+2.  **Faça o Login:** Após o cadastro, faça o login com as credenciais que você acabou de criar.
+3.  **Crie uma Fatura (Opcional):** Para ver o dashboard em ação, você pode adicionar uma fatura de teste manualmente no `phpMyAdmin` na tabela `invoices`, associando-a ao `id` do seu novo usuário.
 
-* **Email:** `joao.silva@example.com`
-* **Senha:** `senha123`
+---
+
+## 💡 Melhorias Futuras e Próximos Passos
+
+Este projeto serve como uma base sólida que pode ser expandida com diversas funcionalidades profissionais. Os próximos passos lógicos na evolução do sistema incluem:
+
+* **Painel Administrativo:**
+    * Criar uma área restrita para administradores com a capacidade de gerenciar usuários.
+    * Implementar funcionalidades para que o administrador possa cadastrar, editar e excluir faturas para qualquer usuário do sistema.
+
+* **API de Integração para Lojas (Webhook):**
+    * Desenvolver um endpoint de API seguro onde sistemas externos (como os das lojas parceiras) possam enviar novas faturas para os clientes de forma automatizada, espelhando o funcionamento de sistemas reais.
+
+* **Funcionalidades Adicionais para o Usuário:**
+    * Edição de Perfil de Usuário: Permitir que o usuário altere seus dados pessoais e senha.
+    * Geração de faturas em PDF.
+    * Dashboard com gráficos de gastos.
+    * Sistema de recuperação de senha por email.
 
 ---
 
@@ -108,5 +125,3 @@ Para testar o sistema imediatamente, use o usuário de exemplo que o script SQL 
 * **Matheus Sousa**
     * GitHub: [@Omatheus31](https://github.com/Omatheus31)
 
----
-*Projeto desenvolvido como parte de avaliação acadêmica, com foco em boas práticas de programação, segurança e experiência do usuário.*
