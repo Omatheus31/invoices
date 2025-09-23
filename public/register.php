@@ -50,7 +50,8 @@
             </div>
         </section>
         <section class="promo-section">
-            </section>
+             <h2>Seu controle financeiro na palma da mão.</h2>
+        </section>
     </main>
     <?php require_once '../includes/footer.php'; ?>
 </body>
