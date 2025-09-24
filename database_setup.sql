@@ -22,20 +22,27 @@ CREATE TABLE `users` (
   UNIQUE KEY `cpf` (`cpf`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `invoices`
+--
+DROP TABLE IF EXISTS `invoices`;
+CREATE TABLE `invoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `due_date` date NOT NULL,
+  `status` enum('Paga','Pendente','Vencida') NOT NULL DEFAULT 'Pendente',
+  `barcode` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Adicionando Constraints (Chaves Estrangeiras)
 --
 ALTER TABLE `invoices`
   ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
-
--- =================================================================
--- SCRIPT PARA INSERIR FATURAS DE EXEMPLO PARA UM NOVO USUÁRIO
--- =================================================================
---
--- INSTRUÇÕES:
--- 1. Encontre o ID do usuário que você acabou de cadastrar na tabela `users`.
--- 2. Substitua TODAS as 4 ocorrências de 'SEU_NOVO_ID_DE_USUARIO_AQUI' pelo seu ID.
--- 3. Execute este script na aba SQL do phpMyAdmin.
---
-
