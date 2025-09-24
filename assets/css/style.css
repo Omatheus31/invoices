@@ -261,3 +261,37 @@ main {
 css
 .card-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .card-header .btn { width: auto; }
+
+
+/* ==========================================================================
+   8. POLIMENTO FINAL - CARDS DO DASHBOARD E ESPAÇAMENTO
+   ========================================================================== */
+
+/* Garante que a lista de faturas tenha um bom espaçamento do rodapé */
+.invoice-list {
+    margin-bottom: 3rem; /* Adiciona um espaço generoso na parte inferior */
+}
+
+/* Aplica o estilo de "card flutuante" a cada fatura no dashboard */
+.invoice-link .invoice-card {
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Efeito de hover aprimorado */
+.invoice-link:hover .invoice-card {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border-color: var(--primary-blue);
+}
+
+/* Melhora o alinhamento e destaque do valor */
+.invoice-details {
+    text-align: right;
+}
+
+.invoice-amount {
+    display: block; /* Garante que o valor fique em sua própria linha */
+    margin-bottom: 0.35rem; /* Adiciona um pequeno respiro abaixo do valor */
+    font-size: 1.6rem; /* Aumenta o destaque do valor */
+}

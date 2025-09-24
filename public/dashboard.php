@@ -45,16 +45,18 @@ try {
         <?php else: ?>
             <?php foreach ($invoices as $invoice): ?>
                 <a href="invoice_details.php?id=<?php echo $invoice['id']; ?>" class="invoice-link">
-                    <div class="invoice-summary">
-                        <div class="invoice-description">
-                            <h3><?php echo htmlspecialchars($invoice['description']); ?></h3>
-                            <p>Vencimento: <?php echo date('d/m/Y', strtotime($invoice['due_date'])); ?></p>
-                        </div>
-                        <div class="invoice-details">
-                            <span class="invoice-amount">R$ <?php echo number_format($invoice['amount'], 2, ',', '.'); ?></span>
-                            <span class="invoice-status <?php echo getStatusClass($invoice['status']); ?>">
-                                <?php echo htmlspecialchars($invoice['status']); ?>
-                            </span>
+                    <div class="card invoice-card">
+                        <div class="invoice-summary">
+                            <div class="invoice-description">
+                                <h3><?php echo htmlspecialchars($invoice['description']); ?></h3>
+                                <p>Vencimento: <?php echo date('d/m/Y', strtotime($invoice['due_date'])); ?></p>
+                            </div>
+                            <div class="invoice-details">
+                                <span class="invoice-amount">R$ <?php echo number_format($invoice['amount'], 2, ',', '.'); ?></span>
+                                <span class="invoice-status <?php echo getStatusClass($invoice['status']); ?>">
+                                    <?php echo htmlspecialchars($invoice['status']); ?>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </a>
