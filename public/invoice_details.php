@@ -43,7 +43,10 @@ if ($invoice_id > 0) {
 <main class="container">
     <div class="page-header">
         <h2>Detalhes da Fatura</h2>
-        <a href="dashboard.php" class="btn-back">&larr; Voltar para o Dashboard</a>
+        <div class="page-header-actions">
+            <a href="dashboard.php" class="btn-back">&larr; Voltar</a>
+            <a href="generate_invoice_pdf.php?id=<?php echo $invoice['id']; ?>" class="btn btn-primary" target="_blank">Baixar PDF</a>
+        </div>
     </div>
 
     <?php if (isset($error)): ?>

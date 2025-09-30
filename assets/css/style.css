@@ -687,3 +687,12 @@ input[readonly] {
     border-color: var(--primary-blue);
     cursor: default;
 }
+
+
+.page-header-actions {
+    display: flex;
+    gap: 1rem;
+}
+.page-header-actions .btn {
+    width: auto;
+}
