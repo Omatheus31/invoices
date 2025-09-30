@@ -412,3 +412,168 @@ css
 .role-tag.role-user {
     background-color: var(--primary-blue); /* Azul */
 }
+
+/* --- ESTILOS PARA PÁGINA DE PERFIL --- */
+.profile-card {
+    margin-top: 1.5rem;
+}
+
+.profile-card h3 {
+    margin-bottom: 1rem;
+}
+
+.profile-card hr {
+    margin-bottom: 1.5rem;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.profile-card .btn-primary {
+    width: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* Deixa inputs readonly com cara de "desabilitado" */
+input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+/* Ajustes no dropdown do usuário no header */
+.header-actions .nav-link {
+    padding: 0; /* Remove padding extra */
+}
+.header-actions .welcome-message {
+    display: inline-block; /* Garante que seja visível */
+    font-weight: 500;
+}
+.header-actions .dropdown-menu {
+    left: auto;
+    right: 0; /* Alinha o dropdown à direita */
+}
+
+/* ==========================================================================
+   MÓDULO 8: MENU HAMBÚRGUER RESPONSIVO
+   ========================================================================== */
+
+/* --- ESTILOS BASE (MOBILE) --- */
+
+/* O botão hambúrguer */
+.nav-toggle {
+    display: block; /* Visível no mobile */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001; /* Fica acima de tudo */
+}
+
+.nav-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: var(--white);
+    margin: 5px 0;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* O container da navegação (escondido por padrão no mobile) */
+.nav-wrapper {
+    display: none;
+    position: fixed; /* Ocupa a tela toda */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95); /* Fundo escuro semi-transparente */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Mostra o menu quando o body tiver a classe .nav-open */
+.nav-open .nav-wrapper {
+    display: flex;
+}
+
+/* Animação do hambúrguer para um "X" quando o menu está aberto */
+.nav-open .nav-toggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.nav-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
+}
+.nav-open .nav-toggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Estilo dos itens de menu dentro do overlay mobile */
+.nav-wrapper .main-nav ul,
+.nav-wrapper .header-actions {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+}
+.nav-wrapper .nav-link,
+.nav-wrapper .welcome-message {
+    font-size: 1.5rem; /* Letras maiores */
+    display: block;
+}
+.nav-wrapper .dropdown-menu {
+    position: static; /* Remove o posicionamento flutuante */
+    background: transparent;
+    box-shadow: none;
+    display: none; /* Esconde submenus por padrão no overlay */
+    padding-left: 1rem;
+}
+.nav-wrapper .dropdown.active .dropdown-menu {
+    display: block; /* Mostra o submenu quando clicado */
+}
+
+
+/* --- ESTILOS PARA TELAS MAIORES (TABLET E DESKTOP) --- */
+@media (min-width: 992px) {
+    /* Esconde o botão hambúrguer */
+    .nav-toggle {
+        display: none;
+    }
+
+    /* Mostra a navegação e a coloca no lugar certo */
+    .nav-wrapper {
+        display: flex;
+        position: static;
+        width: auto;
+        height: auto;
+        background: transparent;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    /* Restaura o layout horizontal dos menus */
+    .nav-wrapper .main-nav ul,
+    .nav-wrapper .header-actions {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    /* Restaura o tamanho da fonte e o dropdown flutuante */
+    .nav-wrapper .nav-link,
+    .nav-wrapper .welcome-message {
+        font-size: 1rem;
+    }
+    .nav-wrapper .dropdown-menu {
+        position: absolute;
+        background: var(--white);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        display: block; /* Reverte para o comportamento padrão do dropdown */
+    }
+}
+
+.page-subtitle {
+    margin-bottom: 2rem;
+    color: #666;
+}

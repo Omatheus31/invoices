@@ -276,4 +276,190 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- MÓDULO 6: Lógica do Menu Dropdown (VERSÃO CORRIGIDA) ---
+    const dropdowns = document.querySelectorAll('.dropdown');
+
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
+
+        if (toggle && menu) {
+            // Adiciona o listener de clique APENAS no botão que abre o menu
+            toggle.addEventListener('click', (event) => {
+                // Previne a ação padrão APENAS do botão de abrir
+                event.preventDefault();
+                event.stopPropagation(); // Impede o clique de se propagar para o 'window'
+
+                const isActive = dropdown.classList.contains('active');
+
+                // Fecha todos os outros dropdowns antes de decidir o que fazer
+                closeAllDropdowns();
+
+                // Se o menu não estava ativo, abre ele.
+                if (!isActive) {
+                    dropdown.classList.add('active');
+                    menu.classList.add('show');
+                }
+            });
+        }
+    });
+
+    // Função para fechar todos os dropdowns
+    function closeAllDropdowns() {
+        dropdowns.forEach(dropdown => {
+            dropdown.classList.remove('active');
+            dropdown.querySelector('.dropdown-menu').classList.remove('show');
+        });
+    }
+
+    // Fecha os dropdowns se o usuário clicar fora deles (no 'window')
+    window.addEventListener('click', (event) => {
+        // A lógica '.closest' não é mais necessária aqui, pois o clique no toggle
+        // não chega mais até o window, graças ao event.stopPropagation().
+        closeAllDropdowns();
+    });
+
+    // --- MÓDULO 8: Lógica do Menu Hambúrguer ---
+    const navToggle = document.querySelector('.nav-toggle');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            document.body.classList.toggle('nav-open');
+        });
+    }
+
+    // --- MÓDULO 7: Lógica de Atualizar Perfil com AJAX ---
+    const profileForm = document.getElementById('profile-form');
+
+    if (profileForm) {
+        profileForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = profileForm.querySelector('button[type="submit"]');
+            const formData = new FormData(profileForm);
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Salvando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(profileForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+
+                    // Mágica extra: Atualiza o nome no header em tempo real!
+                    const welcomeMessage = document.querySelector('.welcome-message');
+                    if (welcomeMessage) {
+                        welcomeMessage.textContent = 'Olá, ' + data.newName;
+                    }
+
+                } else {
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+
+            } catch (error) {
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro de comunicação.</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Salvar Alterações';
+            }
+        });
+    }
+
+    // --- MÓDULO 7 (Fase 3): Lógica de Alterar Senha com AJAX ---
+    const passwordForm = document.getElementById('password-form');
+
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = passwordForm.querySelector('button[type="submit"]');
+            const formData = new FormData(passwordForm);
+
+            // Validação extra no frontend: as novas senhas batem?
+            if (formData.get('new_password') !== formData.get('confirm_new_password')) {
+                messageContainer.innerHTML = `<div class="error-banner">A nova senha e a confirmação não coincidem.</div>`;
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Alterando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(passwordForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+                    passwordForm.reset(); // Limpa o formulário após o sucesso
+                } else {
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+            } catch (error) {
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro de comunicação.</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Alterar Senha';
+            }
+        });
+    }
+
+    // --- MÓDULO 7 (Fase 3): Validação de Senha Forte para Nova Senha ---
+    const newPasswordInput = document.getElementById('new_password');
+    const newStrengthFeedback = document.getElementById('new-password-strength-feedback');
+    const changePasswordButton = document.querySelector('#password-form button[type="submit"]');
+
+    if (newPasswordInput && newStrengthFeedback && changePasswordButton) {
+        newPasswordInput.addEventListener('input', () => {
+            const password = newPasswordInput.value;
+            let strength = 0;
+            let feedbackText = '';
+            let feedbackColor = '';
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/)) strength++;
+            if (password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            switch (strength) {
+                case 0:
+                case 1:
+                case 2:
+                    feedbackText = 'Senha Fraca';
+                    feedbackColor = '#dc3545';
+                    break;
+                case 3:
+                case 4:
+                    feedbackText = 'Senha Média';
+                    feedbackColor = '#ffc107';
+                    break;
+                case 5:
+                    feedbackText = 'Senha Forte';
+                    feedbackColor = '#28a745';
+                    break;
+            }
+
+            if (password.length === 0) {
+                newStrengthFeedback.innerHTML = '';
+            } else {
+                newStrengthFeedback.innerHTML = `<span style="color: ${feedbackColor}; font-size: 0.85rem; font-weight: 500;">${feedbackText}</span>`;
+            }
+
+            changePasswordButton.disabled = strength < 3;
+        });
+    }
 });
