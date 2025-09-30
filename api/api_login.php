@@ -2,15 +2,11 @@
 // api/api_login.php
 
 session_start();
-// Define o tipo de conteúdo da resposta como JSON
 header('Content-Type: application/json');
-
 require_once '../config/database.php';
 
-// Cria um array para a resposta
 $response = ['success' => false, 'message' => 'Requisição inválida.'];
 
-// Verifica se os dados foram enviados via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -19,7 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $response['message'] = 'Por favor, preencha todos os campos.';
     } else {
         try {
-            $sql = "SELECT id, name, password_hash FROM users WHERE email = :email";
+            // 1. Modificamos a query para buscar também a coluna 'role'
+            $sql = "SELECT id, name, password_hash, role FROM users WHERE email = :email";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
@@ -27,13 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->rowCount() == 1) {
                 $user = $stmt->fetch();
                 if (password_verify($password, $user['password_hash'])) {
-                    // Login bem-sucedido. Prepara a resposta de sucesso.
+                    // Login bem-sucedido
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['name'];
-                    
+                    // 2. Guardamos o cargo do usuário na sessão (MUITO IMPORTANTE)
+                    $_SESSION['user_role'] = $user['role'];
+
                     $response['success'] = true;
-                    $response['message'] = 'Login realizado com sucesso!';
-                    $response['redirectUrl'] = 'dashboard.php'; // Informa ao JS para onde redirecionar
+
+                    // 3. Decidimos para onde redirecionar com base no cargo
+                    if ($user['role'] === 'admin') {
+                        $response['redirectUrl'] = '../admin/index.php'; // Redireciona para o dashboard do admin
+                    } else {
+                        $response['redirectUrl'] = 'dashboard.php'; // Redireciona para o dashboard do usuário
+                    }
                 } else {
                     $response['message'] = 'Email ou senha inválidos.';
                 }
@@ -46,6 +50,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Converte o array de resposta em JSON e o envia de volta para o JavaScript
 echo json_encode($response);
 ?>

@@ -238,4 +238,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // --- MÓDULO ADMIN: Lógica de Adicionar Fatura com AJAX ---
+    const addInvoiceForm = document.getElementById('add-invoice-form');
+
+    if (addInvoiceForm) {
+        addInvoiceForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = addInvoiceForm.querySelector('button[type="submit"]');
+            const formData = new FormData(addInvoiceForm);
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Cadastrando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(addInvoiceForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+                    addInvoiceForm.reset(); // Limpa o formulário para um novo cadastro
+                } else {
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+
+            } catch (error) {
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro de comunicação.</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Cadastrar Fatura';
+            }
+        });
+    }
 });

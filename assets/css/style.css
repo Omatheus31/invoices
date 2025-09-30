@@ -373,3 +373,42 @@ css
 .dropdown-menu li a:hover {
     background-color: var(--light-gray);
 }
+
+/* --- ESTILOS ADICIONAIS PARA O PAINEL DE ADMIN --- */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaço entre as bordas */
+    font-size: 0.95rem;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table thead th {
+    background-color: var(--light-gray);
+    font-weight: 600;
+    color: #555;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.role-tag {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    color: var(--white);
+    font-size: 0.8rem;
+}
+
+.role-tag.role-admin {
+    background-color: var(--status-overdue); /* Vermelho */
+}
+
+.role-tag.role-user {
+    background-color: var(--primary-blue); /* Azul */
+}
