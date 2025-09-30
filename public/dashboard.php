@@ -11,34 +11,67 @@ require_once '../includes/header.php';
 require_once '../core/functions.php';
 
 try {
-    // Pega os parâmetros da URL. Se não existirem, são strings vazias.
+    // --- LÓGICA DE PAGINAÇÃO E FILTRAGEM (VERSÃO CORRIGIDA) ---
+
+    // 1. Definições da Paginação (sem alterações)
+    $limit = 10;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // 2. Pega os parâmetros de filtro (sem alterações)
     $search = trim($_GET['search'] ?? '');
     $status = trim($_GET['status'] ?? '');
 
-    // 1. Começa com a query SQL base
-    $sql = "SELECT id, description, amount, due_date, status FROM invoices WHERE user_id = :user_id";
-    
-    // 2. Prepara um array de parâmetros para o prepared statement
+    // 3. Prepara a base da query e dos parâmetros (sem alterações)
+    $sql_base = "FROM invoices WHERE user_id = :user_id";
     $params = [':user_id' => $_SESSION['user_id']];
 
-    // 3. Adiciona a condição de BUSCA (LIKE) se o campo de busca foi preenchido
+    // 4. Adiciona a condição de BUSCA (sem alterações)
     if (!empty($search)) {
-        $sql .= " AND description LIKE :search";
-        $params[':search'] = '%' . $search . '%'; // O '%' é o coringa do LIKE
+        $sql_base .= " AND description LIKE :search";
+        $params[':search'] = '%' . $search . '%';
     }
 
-    // 4. Adiciona a condição de FILTRO (status) se um status foi escolhido
+    // 5. NOVA LÓGICA DE FILTRO DE STATUS (A CORREÇÃO ESTÁ AQUI!)
     if (!empty($status)) {
-        $sql .= " AND status = :status";
-        $params[':status'] = $status;
+        switch ($status) {
+            case 'Pendente':
+                // Faturas pendentes são as que estão no banco como 'Pendente'
+                // E cuja data de vencimento é HOJE ou no FUTURO.
+                $sql_base .= " AND status = 'Pendente' AND due_date >= CURDATE()";
+                break;
+            case 'Vencida':
+                // Faturas vencidas são as que estão no banco como 'Pendente'
+                // E cuja data de vencimento já PASSOU.
+                $sql_base .= " AND status = 'Pendente' AND due_date < CURDATE()";
+                break;
+            case 'Paga':
+                // Faturas pagas são simplesmente as que estão marcadas como 'Paga'.
+                $sql_base .= " AND status = 'Paga'";
+                break;
+        }
     }
 
-    // 5. Adiciona a ordenação no final da query
-    $sql .= " ORDER BY due_date DESC";
+    // 6. Contagem para paginação (sem alterações)
+    $total_sql = "SELECT COUNT(*) " . $sql_base;
+    $total_stmt = $pdo->prepare($total_sql);
+    $total_stmt->execute($params);
+    $total_invoices = $total_stmt->fetchColumn();
+    $total_pages = ceil($total_invoices / $limit);
 
-    // 6. Prepara e executa a query construída dinamicamente
+    // 7. Query principal com LIMIT e OFFSET (sem alterações na estrutura)
+    $sql = "SELECT id, description, amount, due_date, status " . $sql_base . " ORDER BY due_date DESC LIMIT :limit OFFSET :offset";
+    
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    
+    foreach ($params as $key => &$val) {
+        $stmt->bindParam($key, $val);
+    }
+    
+    $stmt->execute();
     $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
@@ -82,8 +115,8 @@ try {
                             </div>
                             <div class="invoice-details">
                                 <span class="invoice-amount">R$ <?php echo number_format($invoice['amount'], 2, ',', '.'); ?></span>
-                                <span class="invoice-status <?php echo getStatusClass($invoice['status']); ?>">
-                                    <?php echo htmlspecialchars($invoice['status']); ?>
+                                <span class="invoice-status <?php echo getStatusClass(getSmartStatus($invoice)); ?>">
+                                    <?php echo htmlspecialchars(getSmartStatus($invoice)); ?>
                                 </span>
                             </div>
                         </div>
@@ -91,6 +124,25 @@ try {
                 </a>
             <?php endforeach; ?>
         <?php endif; ?>
+        <div class="pagination">
+            <?php if ($total_pages > 1): ?>
+                
+                <?php if ($page > 1): ?>
+                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>">&laquo; Anterior</a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?php echo $i; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>" class="<?php echo $i == $page ? 'active' : ''; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo $search; ?>&status=<?php echo $status; ?>">Próximo &raquo;</a>
+                <?php endif; ?>
+
+            <?php endif; ?>
+        </div>
     </div>
 </main>
 

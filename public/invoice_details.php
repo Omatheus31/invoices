@@ -63,8 +63,8 @@ if ($invoice_id > 0) {
             <div class="details-grid">
                 <div>
                     <strong>Status:</strong>
-                    <span class="invoice-status <?php echo getStatusClass($invoice['status']); ?>">
-                        <?php echo htmlspecialchars($invoice['status']); ?>
+                    <span class="invoice-status <?php echo getStatusClass(getSmartStatus($invoice)); ?>">
+                        <?php echo htmlspecialchars(getSmartStatus($invoice)); ?>
                     </span>
                 </div>
                 <div>

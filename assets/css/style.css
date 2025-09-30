@@ -656,3 +656,34 @@ input[readonly] {
         min-width: 300px;
     }
 }
+
+/* --- MÓDULO 10: ESTILOS DA PAGINAÇÃO --- */
+.pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: var(--primary-blue);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+
+.pagination a.active {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+    cursor: default;
+}
