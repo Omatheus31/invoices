@@ -8,15 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../config/database.php';
 require_once '../includes/header.php';
-
-function getStatusClass($status) {
-    switch ($status) {
-        case 'Paga': return 'status-paid';
-        case 'Vencida': return 'status-overdue';
-        case 'Pendente': return 'status-pending';
-        default: return '';
-    }
-}
+require_once '../core/functions.php';
 
 try {
     $sql = "SELECT id, description, amount, due_date, status FROM invoices WHERE user_id = :user_id ORDER BY due_date DESC";

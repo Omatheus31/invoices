@@ -10,15 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../config/database.php';
 require_once '../includes/header.php';
-
-function getStatusClass($status) {
-    switch ($status) {
-        case 'Paga': return 'status-paid';
-        case 'Vencida': return 'status-overdue';
-        case 'Pendente': return 'status-pending';
-        default: return '';
-    }
-}
+require_once '../core/functions.php';
 
 // Pega o ID da fatura da URL e garante que seja um número inteiro
 $invoice_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
