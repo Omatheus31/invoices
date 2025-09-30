@@ -577,3 +577,82 @@ input[readonly] {
     margin-bottom: 2rem;
     color: #666;
 }
+
+/* --- MÓDULO 9: ESTILOS DA BARRA DE FILTRO --- */
+.filter-bar {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filter-form {
+    width: 100%;
+}
+
+.search-group {
+    display: flex;
+    width: 100%;
+}
+
+.search-group input {
+    flex-grow: 1;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: 6px 0 0 6px;
+    font-size: 1rem;
+}
+.search-group input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+.btn-search {
+    border: 1px solid var(--primary-blue);
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0 1.5rem;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+    font-weight: 500;
+}
+
+.filter-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-links a {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    color: var(--dark-gray);
+    background-color: #e9ecef;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filter-links a:hover {
+    background-color: #d8e0e7;
+}
+
+.filter-links a.active {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+/* Ajustes para telas maiores */
+@media (min-width: 768px) {
+    .filter-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .filter-form {
+        width: auto;
+        min-width: 300px;
+    }
+}
