@@ -462,4 +462,89 @@ document.addEventListener('DOMContentLoaded', () => {
             changePasswordButton.disabled = strength < 3;
         });
     }
+    // --- MÓDULO 12: Lógica para Apagar Fatura (Admin) ---
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault(); // Impede o link de fazer qualquer coisa
+
+            const invoiceId = button.dataset.id;
+
+            // 1. Pede confirmação ao admin
+            if (!confirm('Tem a certeza que deseja apagar permanentemente esta fatura? Esta ação não pode ser desfeita.')) {
+                return; // Se o admin cancelar, a função para aqui
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('invoice_id', invoiceId);
+
+                // 2. Envia a requisição para a API de exclusão
+                const response = await fetch('../api/api_delete_invoice.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message); // Exibe um alerta de sucesso
+
+                    // 3. A Mágica: Remove a linha da tabela da interface
+                    const row = button.closest('tr'); // Encontra a linha (<tr>) pai do botão
+                    row.remove(); // Remove a linha da tela
+
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            } catch (error) {
+                alert('Ocorreu um erro de comunicação com o servidor.');
+            }
+        });
+    });
+
+    // --- MÓDULO 12: Lógica para Editar Fatura (Admin) ---
+    const editInvoiceForm = document.getElementById('edit-invoice-form');
+
+    if (editInvoiceForm) {
+        editInvoiceForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = editInvoiceForm.querySelector('button[type="submit"]');
+            const formData = new FormData(editInvoiceForm);
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Salvando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(editInvoiceForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+                    // Opcional: redirecionar para a lista após alguns segundos
+                    setTimeout(() => {
+                        window.location.href = 'manage_invoices.php';
+                    }, 1500); // Redireciona após 1.5 segundos
+                } else {
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+
+            } catch (error) {
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro de comunicação.</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Salvar Alterações';
+            }
+        });
+    }
+
+    
 });

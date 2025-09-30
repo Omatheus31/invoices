@@ -13,8 +13,14 @@
             <a href="index.php" class="logo-main">Admin Invoices</a>
             <nav class="main-nav">
                 <ul>
-                    <li class="nav-item"><a href="index.php" class="nav-link">Usuários</a></li>
-                    <li class="nav-item"><a href="add_invoice.php" class="nav-link">Cadastrar Fatura</a></li>
+                    <li class="nav-item"><a href="index.php" class="nav-link">Utilizadores</a></li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">Faturas <span class="arrow">&#9662;</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="manage_invoices.php">Listar Faturas</a></li>
+                            <li><a href="add_invoice.php">Adicionar Fatura</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <div class="header-actions">

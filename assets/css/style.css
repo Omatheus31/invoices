@@ -696,3 +696,26 @@ input[readonly] {
 .page-header-actions .btn {
     width: auto;
 }
+
+/* --- ESTILOS PARA CRUD ADMIN --- */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.btn-edit { background-color: var(--primary-blue); }
+.btn-delete { background-color: var(--status-overdue); }
+
+/* Novas cores para os status de fatura */
+.role-tag.role-paga { background-color: var(--status-paid); }
+.role-tag.role-pendente { background-color: var(--status-pending); color: var(--dark-gray); }
+.role-tag.role-vencida { background-color: var(--status-overdue); }
