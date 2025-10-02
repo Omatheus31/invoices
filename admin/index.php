@@ -43,6 +43,7 @@ try {
                         <th>Email</th>
                         <th>Cargo (Role)</th>
                         <th>Data de Cadastro</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +58,13 @@ try {
                                 </span>
                             </td>
                             <td><?php echo date('d/m/Y H:i', strtotime($user['created_at'])); ?></td>
+                            <td class="action-buttons">
+                                <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="btn-action btn-edit">Editar</a>
+                                
+                                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $user['id']): ?>
+                                    <a href="#" class="btn-action btn-delete-user" data-id="<?php echo $user['id']; ?>">Apagar</a>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

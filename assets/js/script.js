@@ -546,5 +546,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    
+    // --- MÓDULO 13: Lógica para Apagar Utilizador (Admin) ---
+    const deleteUserButtons = document.querySelectorAll('.btn-delete-user');
+
+    deleteUserButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const userId = button.dataset.id;
+            
+            if (!confirm('Tem a certeza que deseja apagar este utilizador? Todas as suas faturas também serão apagadas permanentemente.')) {
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('user_id', userId);
+
+                const response = await fetch('../api/api_delete_user.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    button.closest('tr').remove();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            } catch (error) {
+                alert('Ocorreu um erro de comunicação com o servidor.');
+            }
+        });
+    });
+
+    // --- MÓDULO 13: Lógica para Editar Utilizador (Admin) ---
+    const editUserForm = document.getElementById('edit-user-form');
+
+    if (editUserForm) {
+        editUserForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const messageContainer = document.getElementById('message-container');
+            const submitButton = editUserForm.querySelector('button[type="submit"]');
+            const formData = new FormData(editUserForm);
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Salvando...';
+            messageContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(editUserForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = `<div class="success-banner">${data.message}</div>`;
+                    setTimeout(() => { window.location.href = 'index.php'; }, 1500);
+                } else {
+                    messageContainer.innerHTML = `<div class="error-banner">${data.message}</div>`;
+                }
+            } catch (error) {
+                messageContainer.innerHTML = `<div class="error-banner">Ocorreu um erro de comunicação.</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Salvar Alterações';
+            }
+        });
+    }
 });
